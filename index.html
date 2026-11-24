@@ -401,6 +401,20 @@
 
     <!-- CONTACT SECTION -->
     <section id="contact" class="section contact">
+      <h1>Contact Me</h1>
+      <!--
+        IMPORTANT: this form needs YOUR OWN Formspree endpoint.
+        Sign up free at https://formspree.io, create a form, and paste its
+        endpoint below in place of YOUR_FORM_ID. Until you do, the form will
+        not deliver anything.
+      -->
+      <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send</button>
+        <p id="form-status" style="margin-top:10px; display:none; color:lightgreen;">Message sent &mdash; thank you.</p>
+      </form>
       <div class="social">
         <a href="https://www.linkedin.com/in/emmanuel-airiofolo/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
         <a href="https://github.com/Emma-airi" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
