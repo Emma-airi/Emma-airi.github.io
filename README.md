@@ -1,42 +1,102 @@
+# 🚀 Nathaniel Karau – Engineering Portfolio
 
-# Academic Pages
+Welcome to my personal Engineering Portfolio! This repository hosts my professional portfolio website, showcasing my skills, experience, and projects in manufacturing and design engineering, with a focus on aerospace and defense applications.
 
-![pages-build-deployment](https://github.com/academicpages/academicpages.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)
+---
 
-Academic Pages is a Github Pages template for academic websites.
+## Live Website
 
+Check out my portfolio online:  
+[https://natekarau61.github.io/Engineering-Portfolio/](https://natekarau61.github.io/Engineering-Portfolio/)
 
-# Getting Started
+---
 
-1. Register a GitHub account if you don't have one and confirm your e-mail (required!)
-1. Click the "Use this template" button in the top right.
-1. On the "New repository" page, enter your repository name as "[your GitHub username].github.io", which will also be your website's URL.
-1. Set site-wide configuration and add your content.
-1. Upload any files (like PDFs, .zip files, etc.) to the `files/` directory. They will appear at https://[your GitHub username].github.io/files/example.pdf.  
-1. Check status by going to the repository settings, in the "GitHub pages" section
-1. (Optional) Use the Jupyter notebooks or python scripts in the `markdown_generator` folder to generate markdown files for publications and talks from a TSV file.
+## Repository Structure
+<p>├── index.html (Main portfolio webpage)</p>
+<p>├── assets/ (Folder for supporting files)</p>
+<p>│ ├── Cover Photo</p>
+<p>│ ├── Headshot</p>
+<p>│ └── Logo</p></p>
+<p>└── README.md  (This file)</p>
 
-See more info at https://academicpages.github.io/
+---
 
-## Running Locally
+## Website Features
 
-When you are initially working your website, it is very useful to be able to preview the changes locally before pushing them to GitHub. To work locally you will need to:
+- Clean and modern responsive design using HTML & CSS
+- Projects section to showcase selected engineering work
+- Skills section to highlight technical competencies
+- Resume download link for recruiters and employers
+- Contact section with email, GitHub, and LinkedIn links
+- Fully compatible with GitHub Pages for easy deployment
 
-1. Clone the repository and made updates as detailed above.
-1. Make sure you have ruby-dev, bundler, and nodejs installed: `sudo apt install ruby-dev ruby-bundler nodejs`
-1. Run `bundle install` to install ruby dependencies. If you get errors, delete Gemfile.lock and try again.
-1. Run `jekyll serve -l -H localhost` to generate the HTML and serve it from `localhost:4000` the local server will automatically rebuild and refresh the pages on change.
+---
 
-If you are running on Linux it may be necessary to install some additional dependencies prior to being able to run locally: `sudo apt install build-essential gcc make`
+## Built With
 
-# Maintenance 
+- HTML5
+- CSS3
+- GitHub Pages (hosting)
 
-Bug reports and feature requests to the template  should be [submitted via GitHub](https://github.com/academicpages/academicpages.github.io/issues/new/choose). For questions concerning how to style the template, please feel free to start a [new discussion on GitHub](https://github.com/academicpages/academicpages.github.io/discussions).
+---
 
-This repository was forked (then detached) by [Stuart Geiger](https://github.com/staeiou) from the [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/), which is © 2016 Michael Rose and released under the MIT License (see LICENSE.md). It is currently being maintained by [Robert Zupko](https://github.com/rjzupkoii) and additional maintainers would be welcomed.
+## About Me
 
-## Bugfixes and enhancements
+I am Nathaniel Karau, a Manufacturing & Design Engineer with hands-on experience in aerospace and defense applications. I enjoy solving real-world engineering problems by combining design, manufacturability, and practical implementation.
 
-If you have bugfixes and enhancements that you would like to submit as a pull request, you will need to [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) this repository as opposed to using it as a template. This will also allow you to [synchronize your copy](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) of template to your fork as well.
+Key interests and experience include:
 
-Unfortunately, one logistical issue with a template theme like Academic Pages that makes it a little tricky to get bug fixes and updates to the core theme. If you use this template and customize it, you will probably get merge conflicts if you attempt to synchronize. If you want to save your various .yml configuration files and markdown files, you can delete the repository and fork it again. Or you can manually patch.
+- Product development & CAD modeling (SolidWorks, AutoCAD, Inventor)  
+- Manufacturing methods, DFM, GD&T, and prototyping  
+- Process optimization, Lean principles, and continuous improvement  
+
+I am actively seeking opportunities in **aerospace, defense, and advanced manufacturing**.
+
+---
+
+## Selected Projects
+
+### All Projects
+
+- Tilt Table
+- Box Form - (5' x 5' x 6') 
+- Barrier Form - (34" x 23" x 10')
+- Light Pole Base Form - (30" Diameter)
+- Pool Form - (7' x 13' x 5')
+- Stair Form - (16' x 12' x 4')
+- Other Projects
+
+---
+
+## Skills
+
+### Design & Product Development
+CAD Modeling (SolidWorks, AutoCAD, Inventor), Design for Manufacturability (DFM), GD&T, Prototyping, CAM  
+
+### Manufacturing Processes
+Machining (CNC, Milling, Turning, Drilling, Grinding), Welding, Casting, Injection Molding, Assembly Methods  
+
+### Process Engineering
+Process optimization, Lean Manufacturing, Six Sigma, Failure Mode & Effects Analysis (FMEA), Process Flow Diagrams  
+
+### Manufacturing Systems & Automation
+PLC Programming, Robotics & Automation Integration, CNC Programming (G-Code, CAM Software), Fixtures, Jigs, Tooling Design  
+
+### Project & Business Skills
+Project Management, Cross-functional Team Collaboration, Technical Writing & Documentation  
+
+### Data & Software Skills
+Data Analysis (Excel, Python), Simulation & Modeling, Microsoft Office, Git/GitHub  
+
+---
+
+## Contact
+
+**Name:** Nathaniel Karau  
+**Email:** [nathaniel.karau@gmail.com](mailto:nathaniel.karau@gmail.com)  
+**GitHub:** [https://github.com/NateKarau61](https://github.com/NateKarau61)  
+**LinkedIn:** [https://www.linkedin.com/in/nate-karau61/](https://www.linkedin.com/in/nate-karau61/)  
+
+Feel free to reach out for collaboration, hiring inquiries, or project discussion.
+
+---
