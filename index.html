@@ -79,7 +79,13 @@
     /* -------------------------
        HOME SECTION
     ------------------------- */
-    .home { background: #1e1e1e; }
+    .home {background-color: #1e1e1e;/* fallback if the image fails */
+    background-image:
+      linear-gradient(rgba(26, 26, 26, 0.72), rgba(26, 26, 26, 0.72)),
+      url('assets/cover.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; }
     .home img { width: 180px; height: 180px; border-radius: 50%; border: 3px solid #444; object-fit: cover; display: block; margin: 1rem auto 0 auto; }
     .home .button-group { margin-top: 1.5rem; display: flex; gap: 1rem; }
     .home .button-group a { padding: 0.8rem 1.5rem; border-radius: 8px; background: #444; color: white; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; transition: background 0.3s; }
