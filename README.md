@@ -1,34 +1,40 @@
-# 🚀 Nathaniel Karau – Engineering Portfolio
+# 🚀 Emmanuel Airiofolo – Engineering Portfolio
 
-Welcome to my personal Engineering Portfolio! This repository hosts my professional portfolio website, showcasing my skills, experience, and projects in manufacturing and design engineering, with a focus on aerospace and defense applications.
+Welcome to my engineering portfolio. This repository hosts my portfolio website, showcasing my skills, experience and projects in design and manufacturing engineering, with a focus on aviation, aerospace and defence applications.
 
 ---
 
 ## Live Website
 
-Check out my portfolio online:  
-[https://natekarau61.github.io/Engineering-Portfolio/](https://natekarau61.github.io/Engineering-Portfolio/)
+[https://emma-airi.github.io/](https://emma-airi.github.io/)
 
 ---
 
 ## Repository Structure
-<p>├── index.html (Main portfolio webpage)</p>
-<p>├── assets/ (Folder for supporting files)</p>
-<p>│ ├── Cover Photo</p>
-<p>│ ├── Headshot</p>
-<p>│ └── Logo</p></p>
-<p>└── README.md  (This file)</p>
+
+```text
+.
+├── index.html          # Main portfolio webpage
+├── assets/             # Supporting files
+│   ├── cover.jpg       # Cover photo
+│   ├── headshot.jpg    # Headshot
+│   └── logo.svg        # Logo
+└── README.md           # This file
+```
+
+> Check this against what the repository actually contains once you have finished
+> restructuring it, and update the filenames to match.
 
 ---
 
 ## Website Features
 
-- Clean and modern responsive design using HTML & CSS
-- Projects section to showcase selected engineering work
-- Skills section to highlight technical competencies
-- Resume download link for recruiters and employers
-- Contact section with email, GitHub, and LinkedIn links
-- Fully compatible with GitHub Pages for easy deployment
+- Clean, responsive layout built with HTML and CSS
+- Projects section presenting selected engineering work
+- Skills section covering technical competencies
+- CV available to download
+- Contact section with email, GitHub and LinkedIn
+- Deployed with GitHub Pages
 
 ---
 
@@ -42,61 +48,91 @@ Check out my portfolio online:
 
 ## About Me
 
-I am Nathaniel Karau, a Manufacturing & Design Engineer with hands-on experience in aerospace and defense applications. I enjoy solving real-world engineering problems by combining design, manufacturability, and practical implementation.
+I am Emmanuel Airiofolo, a first-class MEng Aerospace Engineering graduate from
+Queen Mary University of London, working towards chartership with the IMechE and
+the Royal Aeronautical Society. I enjoy solving real engineering problems by
+combining design, manufacturability and practical implementation.
 
 Key interests and experience include:
 
-- Product development & CAD modeling (SolidWorks, AutoCAD, Inventor)  
-- Manufacturing methods, DFM, GD&T, and prototyping  
-- Process optimization, Lean principles, and continuous improvement  
+- Design and product development, including CAD modelling
+- Manufacturing methods, design for manufacture (DFM), GD&T and prototyping
+- Process optimisation and continuous improvement
 
-I am actively seeking opportunities in **aerospace, defense, and advanced manufacturing**.
+I am actively seeking opportunities in **aerospace, defence and advanced
+manufacturing**.
 
 ---
 
 ## Selected Projects
 
-### All Projects
+### [Project title]
 
-- Tilt Table
-- Box Form - (5' x 5' x 6') 
-- Barrier Form - (34" x 23" x 10')
-- Light Pole Base Form - (30" Diameter)
-- Pool Form - (7' x 13' x 5')
-- Stair Form - (16' x 12' x 4')
-- Other Projects
+*[One line of context — university project, internship, or personal work.]*
+
+- **Problem:** [what needed solving, and the constraints you were working to]
+- **Approach:** [the method, and why you chose it over the alternatives]
+- **Outcome:** [result, with numbers wherever you have them]
+- **Tools:** [software, hardware, test equipment]
+- **Write-up / repository:** [link]
+
+### [Project title]
+
+*[One line of context.]*
+
+- **Problem:**
+- **Approach:**
+- **Outcome:**
+- **Tools:**
+- **Write-up / repository:**
+
+### [Project title]
+
+*[One line of context.]*
+
+- **Problem:**
+- **Approach:**
+- **Outcome:**
+- **Tools:**
+- **Write-up / repository:**
 
 ---
 
 ## Skills
 
+<!-- List only what you would be comfortable being questioned on in a technical
+     interview. Delete any heading you cannot fill credibly — an honest short
+     list reads far better than a long one you have to walk back. -->
+
 ### Design & Product Development
-CAD Modeling (SolidWorks, AutoCAD, Inventor), Design for Manufacturability (DFM), GD&T, Prototyping, CAM  
 
-### Manufacturing Processes
-Machining (CNC, Milling, Turning, Drilling, Grinding), Welding, Casting, Injection Molding, Assembly Methods  
+[CAD packages you actually use, DFM, GD&T, tolerance stack-ups, prototyping]
 
-### Process Engineering
-Process optimization, Lean Manufacturing, Six Sigma, Failure Mode & Effects Analysis (FMEA), Process Flow Diagrams  
+### Analysis & Simulation
 
-### Manufacturing Systems & Automation
-PLC Programming, Robotics & Automation Integration, CNC Programming (G-Code, CAM Software), Fixtures, Jigs, Tooling Design  
+[FEA, CFD, structural or thermal analysis, the specific solvers you have used]
 
-### Project & Business Skills
-Project Management, Cross-functional Team Collaboration, Technical Writing & Documentation  
+### Manufacturing & Prototyping
 
-### Data & Software Skills
-Data Analysis (Excel, Python), Simulation & Modeling, Microsoft Office, Git/GitHub  
+[Machining, additive manufacture, composites, assembly methods, workshop experience]
+
+### Software & Data
+
+[Programming languages, MATLAB/Simulink, data analysis, version control]
+
+### Professional
+
+[Technical writing, project management, cross-functional collaboration, presenting]
 
 ---
 
 ## Contact
 
-**Name:** Nathaniel Karau  
-**Email:** [nathaniel.karau@gmail.com](mailto:nathaniel.karau@gmail.com)  
-**GitHub:** [https://github.com/NateKarau61](https://github.com/NateKarau61)  
-**LinkedIn:** [https://www.linkedin.com/in/nate-karau61/](https://www.linkedin.com/in/nate-karau61/)  
+**Name:** Emmanuel Airiofolo
+**Email:** [emmanuelmichelairi@gmail.com](mailto:emmanuelmichelairi@gmail.com)
+**GitHub:** [https://github.com/Emma-airi](https://github.com/Emma-airi)
+**LinkedIn:** [https://www.linkedin.com/in/emmanuel-airiofolo/](https://www.linkedin.com/in/emmanuel-airiofolo/)
 
-Feel free to reach out for collaboration, hiring inquiries, or project discussion.
+Feel free to get in touch regarding hiring, collaboration or project discussion.
 
 ---
