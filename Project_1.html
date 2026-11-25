@@ -1,452 +1,288 @@
-<!DOCTYPE html> 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-GB">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Box Form - (5'x5'x6')</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEO constellation coverage simulator | Emmanuel Airiofolo</title>
+  <meta name="description" content="A validated Python model of a 528-satellite low Earth orbit broadband constellation: J2 orbit propagation, Walker layouts and ground coverage analysis.">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-	 <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-
-  <!-- model-viewer -->
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
   <style>
-    /* ---------- Vars & Reset ---------- */
-    :root{
-      --accent:#00aaff;
-      --bg:#1a1a1a;
-      --panel:#111;
-      --muted:#aaa;
-      --text:#e0e0e0;
-      --max-width:1200px;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --accent: #00aaff;
+      --bg: #1a1a1a;
+      --panel: #2b2b2b;
+      --border: #444;
+      --text: #e0e0e0;
+      --muted: #9a9a9a;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;scroll-behavior:smooth; -webkit-font-smoothing:antialiased;}
-    a{color:inherit}
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Arial', sans-serif;
+      line-height: 1.65;
+    }
+
+    /* ---------- Top bar ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #111; border-bottom: 1px solid #333;
+      padding: 0.9rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .topbar a { color: var(--text); text-decoration: none; font-weight: bold; }
+    .topbar a:hover { color: var(--accent); }
+    .topbar .repo-link {
+      border: 2px solid var(--accent); border-radius: 6px;
+      padding: 0.35rem 0.75rem; white-space: nowrap;
+    }
+    .topbar .repo-link:hover { background: var(--accent); color: #000; }
 
     /* ---------- Layout ---------- */
-    .sidebar { position: fixed;  top: 0; left: 0; width: 220px; height: 100%; background: #111; padding: 2rem 1rem; display: flex; flex-direction: column; align-items: center;
-      transition: transform 0.3s ease; z-index: 100;}
-    .sidebar h2 {   color: var(--accent); margin-bottom: 1.5rem;padding-bottom: 0.8rem; border-bottom: 1px solid #333; /* Adjust color if needed */ width: 100%; text-align: center;}
-    .sidebar ul { list-style: none; width: 100%; flex-grow: 1;}
-    .sidebar ul li { margin: 1.5rem 0; text-align: center;}
-    .sidebar ul li a { color: #e0e0e0; text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: color 0.3s;}
-    .sidebar ul li a:hover { color: var(--accent); }
-    .back-button { margin-top: auto;  background: #e63946;  color: white;  text-decoration: none;  font-weight: bold;  font-size: 1.1rem;  padding: 0.6rem 1rem;
-      border-radius: 8px;  display: flex;  align-items: center;  gap: 8px;  transition: background 0.3s, transform 0.2s;}
-    .back-button:hover { background: #ff4d5a;  transform: translateX(-3px);}
+    .wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
 
-    /* ---------- Mobile Toggle & Overlay ---------- */
-    .menu-toggle{
-      position:fixed;top:12px;left:12px;z-index:1600;
-      display:none;background:var(--panel);color:var(--text);border-radius:8px;padding:.45rem .6rem;font-size:1.1rem;cursor:pointer;
-      align-items:center;gap:.5rem;  outline: 2px solid var(--accent); outline-offset: 2px;}
-    .menu-toggle:focus{outline:2px solid var(--accent)}
-    /* Visual overlay on mobile only. IMPORTANT: pointer-events:none so page remains scrollable behind the menu (per your 'allow scroll' decision). */
-	.mobile-overlay { position: fixed; top: 0; right: 0; width: calc(100% - 220px); height: 100%; background: rgba(0,0,0,.45); z-index: 1500; opacity: 0; pointer-events: none; transition: opacity .25s ease;}
-	.sidebar.active + .mobile-overlay.active { pointer-events: auto;}
+    h1 { font-size: 2.1rem; line-height: 1.25; margin-bottom: 0.6rem; }
+    h2 {
+      font-size: 1.45rem; margin: 3rem 0 1rem;
+      padding-bottom: 0.4rem; border-bottom: 1px solid #333; color: var(--accent);
+    }
+    h3 { font-size: 1.1rem; margin: 1.8rem 0 0.6rem; }
+    p { margin-bottom: 1rem; }
+    a { color: var(--accent); }
 
-    /* ---------- Main content ---------- */
-    .content {  margin-left: 220px;  padding: 2rem;  text-align: center; transition: margin-left 0.3s ease, transform 0.3s ease;}
-    .project-title { font-size: 2.2rem; color: var(--accent); margin-bottom: 2rem;}
+    .standfirst { font-size: 1.12rem; color: #cfcfcf; margin-bottom: 1.5rem; }
 
-    /* ---------- Sections ---------- */
-    .section { padding: 2rem 1.5rem; margin-bottom: 3rem; border-bottom: 1px solid #333; opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease;}
-    .section.visible { opacity: 1; transform: translateY(0); }
-    .section h1 { margin-bottom: 1.5rem; color: #fff; }
-
-    /* ---------- Masonry/Images ---------- */
-    .masonry{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem;max-width:1100px;margin:0 auto}
-    .img-wrapper{position:relative;cursor:pointer;overflow:hidden;border-radius:8px}
-    .img-wrapper img{width:100%;height:100%;display:block;object-fit:cover;border-radius:8px;transition:transform .28s ease,box-shadow .28s ease}
-    .img-wrapper img:hover{transform:scale(1.03)}
-    .img-wrapper span.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;background:rgba(0,0,0,.45);color:#fff;border-radius:8px;opacity:0;transition:opacity .2s}
-    .img-wrapper:hover span.overlay{opacity:1}
-
-
-    /* ---------- Case Study ---------- */
-    .case-study{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:2rem;text-align:left}
-    .case-block h2{color:#8ab4f8;font-size:1.2rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.45rem}
-    .case-block p,.case-block ul{font-size:1.05rem;line-height:1.6;padding-left: 1.2rem;}
-
-    /* ---------- Lightbox ---------- */
-    #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;justify-content:center;align-items:center;padding:1rem}
-    #lightbox.open{display:flex}
-    #lightbox img{max-width:95%;max-height:85%;object-fit:contain;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.8)}
-    #lightbox .close-btn{position:absolute;top:18px;right:28px;font-size:2rem;color:#fff;cursor:pointer}
-    #lightbox .close-btn:focus{outline:2px solid var(--accent)}
-	#lightbox .nav-btn {  position: absolute;  top: 50%;  transform: translateY(-50%);  font-size: 2.5rem;  color: white; background: rgba(0,0,0,0.5);  border: none;  cursor: pointer;  padding: 0.6rem 1rem;  border-radius: 6px; user-select: none;  transition: background 0.3s;}
-	#lightbox .nav-btn:hover {  background: rgba(0,0,0,0.75);}
-	#lbPrevBtn { left: 20px; }
-	#lbNextBtn { right: 20px; }
-
-	/* ----- Footer styling ----- */
-	footer { background: var(--panel); color: var(--muted); text-align: center; padding: 1.5rem 1rem; font-size: 0.9rem; border-top: 1px solid #333; margin-top: 3rem;}
-	footer p { margin: 0; letter-spacing: 0.5px;}
-	footer a { color: var(--accent); text-decoration: none; font-weight: 600;}
-	footer a:hover { text-decoration: underline;}
-	/* Keep footer at bottom when content is short */
-	html, body { height: 100%; display: flex; flex-direction: column;}
-	main.content { flex: 1;}
-
-    /* ---------- Responsive rules ---------- */
-    /* Mobile first adjustments */
-    @media (max-width:767px){
-      .sidebar{transform:translateX(-105%);width:85vw;max-width:320px;padding:3rem;align-items:center}
-      .sidebar.active{transform:translateX(0)}
-      .menu-toggle{display:flex}
-      .content{margin-left:0;padding:1rem}
-      .project-title{font-size:1.4rem}
-      model-viewer{height:40vh}
-      .mobile-overlay.active{opacity:1}
-        .mobile-overlay {
-    width: 0vw;         /* Covers only the right 15% behind content */
-    left: auto;          /* Reset left positioning */
-    right: 0;
-    transform: none;     /* No sliding needed */
-  }
-      .masonry{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
-      .back-button{align-self:flex-start;margin-top:.75rem}
+    .meta {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #333;
+    }
+    .tag {
+      background: #333; color: var(--text);
+      padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.85rem;
     }
 
-    /* Tablet: fixed sidebar (per your 'fixed' choice) */
-    @media (min-width:768px) and (max-width:1024px){
-      .sidebar{transform:none;left:0;width:220px;padding:1.8rem;align-items:center}
-      .menu-toggle{display:none}
-      .content{margin-left:220px;padding:1.5rem}
-      model-viewer{height:55vh}
+    .notice {
+      background: var(--panel); border-left: 3px solid var(--accent);
+      border-radius: 0; padding: 1rem 1.2rem; margin: 1.5rem 0;
+      font-size: 0.95rem; color: #cfcfcf;
+    }
+    .notice strong { color: #fff; }
+
+    /* ---------- Headline figures ---------- */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem; text-align: center;
+    }
+    .stat .value { font-size: 1.9rem; font-weight: bold; color: var(--accent); display: block; }
+    .stat .label { font-size: 0.85rem; color: var(--muted); }
+
+    /* ---------- Tables ---------- */
+    .table-scroll { overflow-x: auto; margin: 1.5rem 0; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.94rem; }
+    th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid #333; }
+    th { color: var(--accent); font-weight: bold; white-space: nowrap; }
+    tbody tr:hover { background: #232323; }
+
+    /* ---------- Figures ---------- */
+    figure { margin: 2rem 0; }
+    figure img {
+      width: 100%; height: auto; display: block;
+      border: 1px solid var(--border); border-radius: 8px; background: #fff;
+    }
+    figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 0.6rem; }
+
+    /* ---------- Lists ---------- */
+    ul, ol { margin: 0 0 1rem 1.3rem; }
+    li { margin-bottom: 0.45rem; }
+
+    code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #262626; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.9em;
+    }
+    pre {
+      background: #121212; border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem; overflow-x: auto; margin: 1.2rem 0;
+    }
+    pre code { background: none; padding: 0; font-size: 0.88rem; }
+
+    .module-list { list-style: none; margin-left: 0; }
+    .module-list li {
+      padding: 0.5rem 0; border-bottom: 1px solid #2a2a2a;
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+    }
+    .module-list code { min-width: 150px; }
+    .module-list span { color: var(--muted); font-size: 0.92rem; }
+
+    footer {
+      border-top: 1px solid #333; margin-top: 4rem; padding-top: 1.5rem;
+      color: var(--muted); font-size: 0.9rem;
     }
 
-    /* Desktop */
-    @media (min-width:1025px){
-      .sidebar{transform:none;left:0;width:260px}
-      .content{margin-left:260px;padding:2rem}
+    @media (max-width: 600px) {
+      .wrap { padding: 2rem 1.1rem 3rem; }
+      h1 { font-size: 1.65rem; }
+      h2 { font-size: 1.25rem; }
+      .topbar { padding: 0.75rem 1rem; }
     }
-
-    /* Small accessibility improvements */
-    button, .menu-toggle{border:0;background:none;color:inherit}
   </style>
 </head>
 <body>
 
-  <!-- Mobile Menu Toggle (hamburger) -->
-  <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="sidebar" aria-label="Open menu">
-    <i class="fas fa-bars" aria-hidden="true"></i>
-  </button>
-
-  <!-- Visual overlay (mobile only visual) -->
-  <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
-
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar" aria-label="Main navigation">
-    <h2>Portfolio</h2>
-    <ul>
-      <li><a href="#overview">Overview</a></li>
-      <li><a href="#3d_model">3D Model</a></li>
-      <li><a href="#drawings">Drawings</a></li>
-      <li><a href="#photos">Photos</a></li>
-    </ul>
-    <a href="index.html#projects" class="back-button"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back</a>
+  <nav class="topbar">
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Portfolio</a>
+    <!-- TODO: confirm this URL once the repository is pushed -->
+    <a class="repo-link" href="https://github.com/Emma-airi/leo-coverage" target="_blank" rel="noopener">
+      <i class="fab fa-github"></i> View the code
+    </a>
   </nav>
 
-  <!-- Main Content -->
-  <main class="content" id="mainContent" tabindex="-1">
-    <h1 class="project-title">Box Form - (5'x5'x6')</h1>
+  <main class="wrap">
 
-    <!-- Overview -->
-    <section id="overview" class="section" aria-labelledby="overview-heading">
-      <h1 id="overview-heading">Project Overview</h1>
+    <h1>LEO constellation coverage simulator</h1>
+    <p class="standfirst">A validated Python model of a 528-satellite low Earth orbit broadband constellation &mdash; J2 orbit propagation, Walker layouts, and how many satellites a user on the ground can actually see.</p>
 
-      <div class="case-study">
-        <div class="case-block">
-          <h2>Objective</h2>
-			<p>Design and manufacture a <strong>5' x 5' x 6' modular concrete box form</strong> that improves casting efficiency, withstands repeated heavy-duty use, and maintains tight dimensional tolerances to reduce rework and material loss.</p>
-        </div>
+    <div class="meta">
+      <span class="tag">Python</span>
+      <span class="tag">NumPy / SciPy</span>
+      <span class="tag">Orbital mechanics</span>
+      <span class="tag">J2 perturbation</span>
+      <span class="tag">Walker constellations</span>
+      <span class="tag">Unit-tested</span>
+    </div>
 
-        <div class="case-block">
-          <h2>Role & Responsibilities</h2>
-          <ul>
-       		 <li>Led full CAD modeling and mechanical design process</li>
-     	     <li>Generated BOM and cut lists for fabrication</li>
-       		 <li>Coordinated ordering, assembly, and shop support</li>
-          </ul>
-        </div>
+    <div class="notice">
+      <strong>Independent study.</strong> The baseline geometry comes from the public July 2026 FCC filing for Eutelsat Next: 528 satellites, 24 planes, 1,220 km. This work uses public information only. It is not Eutelsat's design, data or analysis.
+    </div>
 
-        <div class="case-block">
-          <h2>Engineering Features</h2>
-          <ul>
-       		 <li>Heavy-duty reinforced wall structure</li>
-       		 <li>Precision bolt and pin alignment for repeat assembly</li>
-        	 <li>Modular panels allowing full disassembly and transport</li>
-          </ul>
-        </div>
+    <h2>The problem</h2>
+    <p>Low Earth orbit satellites move fast, so no single satellite stays over London for long. A broadband constellation only works if, at every moment, enough satellites sit high enough in the sky for a user terminal to connect to one.</p>
+    <p>This model checks exactly that. It builds the constellation, propagates every satellite including the Earth's oblateness, and counts what a ground terminal can see over a full day.</p>
 
-        <div class="case-block">
-          <h2>Tools & Software</h2>
-			<p>Autodesk Inventor (CAD Modeling), MIG Welding, Plasma Cutting, and Shop Fabrication Equipment</p>
-        </div>
+    <h2>Headline results</h2>
+    <p>Baseline case: 25&deg; elevation mask, 24 hours at 30-second steps, user terminal in London.</p>
 
-        <div class="case-block">
-          <h2>Outcome</h2>
-          <p>Successfully deployed in production with <strong>consistent ±1/16” accuracy</strong> across all panels, zero failures over multiple casting cycles, and a modular system that reduced setup and teardown time.</p>
-        </div>
-      </div>
-    </section>
+    <div class="stat-row">
+      <div class="stat"><span class="value">10.2</span><span class="label">mean satellites in view</span></div>
+      <div class="stat"><span class="value">5</span><span class="label">worst case in 24 h</span></div>
+      <div class="stat"><span class="value">100%</span><span class="label">time covered</span></div>
+      <div class="stat"><span class="value">65.6&deg;</span><span class="label">mean best elevation</span></div>
+    </div>
 
-    <!-- 3D Model -->
-    <section id="3d_model" class="section" aria-labelledby="model-heading">
-      <h1 id="model-heading">3D Model</h1>
-<model-viewer src="Project_1/3D_Form.glb" 
-	ar ar-modes="webxr scene-viewer quick-look" 
-	camera-controls tone-mapping="Neutral" 
-	poster="poster.webp" 
-	shadow-intensity="1.77" 
-	alt="Box Form 3D Model" 
-	loading="eager" 
-	style="width: 100%; margin: 0 auto; max-width: 800px; height: 60vh; border-radius: 12px; background-color:#222;" auto-rotate exposure="0.59" shadow-softness="0.53" environment-image="legacy"> 
-</model-viewer>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Quantity</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Footprint half-angle per satellite</td><td>15.5&deg; Earth central angle</td></tr>
+          <tr><td>Satellites in view over London, mean</td><td>10.2</td></tr>
+          <tr><td>Satellites in view over London, range</td><td>5 to 14</td></tr>
+          <tr><td>Time with at least one satellite in view</td><td>100%</td></tr>
+          <tr><td>Mean best available elevation</td><td>65.6&deg;</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    </section>
+    <figure>
+      <img src="assets/leo-coverage/london_24h.png" alt="Two stacked time series over 24 hours: the number of satellites above 25 degrees elevation over London, varying between 5 and 14, and the best available elevation angle, oscillating between roughly 47 and 90 degrees.">
+      <figcaption>Satellites in view and best available elevation over London across one day. The count never drops below five.</figcaption>
+    </figure>
 
-    <!-- Drawings -->
-    <section id="drawings" class="section" aria-labelledby="drawings-heading">
-      <h1 id="drawings-heading">Drawings</h1>
-      <div class="masonry" id="drawingsMasonry">
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Drawings/Roller_Assembly.jpg" alt="Roller Assembly"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Drawings/Core_Assembly.jpg" alt="Core Assembly"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Drawings/Long_Jacket_Assembly.jpg" alt="Long Jacket Assembly"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Drawings/Short_Jacket_Assembly.jpg" alt="Short Jacket Assembly"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Drawings/Core_Base_Assembly.jpg" alt="Core Base Assembly"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Drawings/Form_Assembly.jpg" alt="Form Assembly"><span class="overlay">Click to expand</span></div>
-      </div>
-    </section>
+    <h2>The interesting result</h2>
+    <p>The filing does not give the inclination, so the model treats it as a variable and sweeps it. The <em>mean</em> number of satellites over London barely moves between 80&deg; and 98&deg; &mdash; it sits near 10 throughout, which would suggest inclination hardly matters.</p>
+    <p>The worst case tells a different story. The minimum number in view peaks at 6 for a near-polar orbit and falls to 3 at the edges of the sweep. A designer sizing a system for the worst moment rather than the average would care a great deal about that difference, and an average-only analysis would have missed it entirely.</p>
 
-    <!-- Photos -->
-    <section id="photos" class="section" aria-labelledby="photos-heading">
-      <h1 id="photos-heading">Photos</h1>
-      <div class="masonry" id="photosMasonry">
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Pictures/Rollers.jpg" alt="Rollers"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Pictures/Form_2.jpg" alt="Form 2"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Pictures/Jacket.jpg" alt="Jacket"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Pictures/Form.jpg" alt="Form"><span class="overlay">Click to expand</span></div>
-        <div class="img-wrapper"><img loading="lazy" src="Project_1/Pictures/Core.jpg" alt="Core"><span class="overlay">Click to expand</span></div>
-		<div class="img-wrapper"><img loading="lazy" src="Project_1/Pictures/Form_1.jpg" alt="Form 1"><span class="overlay">Click to expand</span></div>
-      </div>
-    </section>
+    <figure>
+      <img src="assets/leo-coverage/inclination_sweep.png" alt="Line chart of satellites in view over London against orbital inclination from 80 to 98 degrees. The mean stays near 10 across the range while the minimum rises from 3 to a peak of 6 near 90 degrees.">
+      <figcaption>Mean and minimum satellites in view against inclination. The mean is flat; the minimum is not.</figcaption>
+    </figure>
 
-<!-- Lightbox -->
-<div id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-  <button class="close-btn" aria-label="Close image" title="Close" id="lbCloseBtn">&times;</button>
-  <button class="nav-btn prev" id="lbPrevBtn" aria-label="Previous image">&#10094;</button>
-  <img id="lightbox-img" src="" alt="Expanded view">
-  <button class="nav-btn next" id="lbNextBtn" aria-label="Next image">&#10095;</button>
-</div>
+    <h2>Global picture</h2>
+    <p>Near-polar constellations crowd together at high latitudes, because every orbital plane passes close to the poles. The effect is stark in a global snapshot: the same constellation that puts about 10 satellites over London puts more than 45 over the polar regions, where almost nobody lives.</p>
 
-    <!-- Footer -->
+    <figure>
+      <img src="assets/leo-coverage/global_snapshot.png" alt="World map coloured by the number of satellites in view at one instant. Bands near the north and south poles show over 45 satellites in view, while equatorial and mid-latitude regions show roughly 5 to 15.">
+      <figcaption>Satellites above 25&deg; elevation across the globe at a single instant, with London marked.</figcaption>
+    </figure>
+
+    <h2>Method</h2>
+    <ol>
+      <li><strong>Constellation layout.</strong> Walker star pattern, with planes spread over 180&deg; of right ascension as used for near-polar systems. A Walker delta option is also provided.</li>
+      <li><strong>Propagation, two routes.</strong> A numerical route integrates two-body plus J2 acceleration with SciPy's DOP853 solver &mdash; accurate, but too slow for 528 satellites. An analytic secular J2 route advances the right ascension of the ascending node and the argument of latitude at their mean rates, which is fast enough for the whole constellation and is validated against the numerical route.</li>
+      <li><strong>Frames.</strong> ECI positions rotated to Earth-fixed coordinates, ground sites placed on the WGS-84 ellipsoid, elevation measured from the local geodetic vertical.</li>
+      <li><strong>Coverage.</strong> Count of satellites above the elevation mask, both for one site over time and for a global grid at an instant.</li>
+    </ol>
+
+    <h2>Validation</h2>
+    <p>Rather than asserting the model is right, every claim below runs as a unit test on every commit. If any of them break, the build goes red.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Check</th><th>Expected</th><th>Model</th></tr></thead>
+        <tbody>
+          <tr><td>Orbital period at 1,220 km</td><td>Hand formula, 109.9 min</td><td>Exact match</td></tr>
+          <tr><td>Two-body orbit closes after one period</td><td>0 m</td><td>0.0001 m</td></tr>
+          <tr><td>Two-body energy over 24 h</td><td>Constant</td><td>Relative drift 3&times;10<sup>&minus;11</sup></td></tr>
+          <tr><td>J2 nodal drift, ISS-type orbit</td><td>&minus;4.95&deg;/day</td><td>&minus;4.97&deg;/day (0.4%)</td></tr>
+          <tr><td>Secular vs numerical, radial / cross-track</td><td>Small</td><td>6.8 km / 0.3 km</td></tr>
+          <tr><td>Satellite overhead</td><td>90&deg; elevation</td><td>90&deg;</td></tr>
+          <tr><td>Satellite at footprint edge</td><td>25&deg; elevation</td><td>25&deg;</td></tr>
+          <tr><td>Area-weighted global mean in view</td><td>9.56</td><td>9.68 (1.2%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The last check is the one I would point an interviewer at. Each footprint covers a fixed fraction of the sphere, so the area-weighted global mean must equal <code>n_sats &times; (1 &minus; cos &lambda;) / 2</code> regardless of how the satellites are arranged. It is a result the simulation cannot get right by accident.</p>
+
+    <h2>Assumptions and limitations</h2>
+    <p>Stating these plainly matters more than hiding them:</p>
+    <ul>
+      <li><strong>Inclination.</strong> 87.9&deg; is an assumption close to the current OneWeb fleet, not a filed value &mdash; hence the sweep above.</li>
+      <li><strong>Elevation mask.</strong> 25&deg; is an assumed user-terminal limit.</li>
+      <li><strong>Along-track drift.</strong> The secular model treats the initial elements as mean elements while the numerical model starts from osculating ones, so an along-track offset grows by roughly 80 km per orbit. Planes and radii still agree closely, so coverage statistics hold, but satellite timing would not. A Brouwer or Kozai conversion would fix it.</li>
+      <li><strong>Earth rotation.</strong> A constant rotation rate, with no precession, nutation or polar motion.</li>
+      <li><strong>Geometry only.</strong> No link budget, gateway visibility, inter-satellite links, outages or beam capacity.</li>
+    </ul>
+
+    <h2>Next steps</h2>
+    <ul>
+      <li>Link budget layer: path loss against elevation for the Ku-band user and Ka-band gateway links, then throughput per beam</li>
+      <li>Osculating-to-mean element conversion to remove the along-track drift</li>
+      <li>Cross-check a ground track against NASA GMAT</li>
+      <li>Coverage statistics over time for the global grid</li>
+      <li>A Julia version of the propagator, with a speed comparison</li>
+    </ul>
+
+    <h2>The code</h2>
+    <ul class="module-list">
+      <li><code>constants.py</code><span>WGS-84 and gravity constants</span></li>
+      <li><code>orbits.py</code><span>Elements to state, numerical and secular J2 propagation</span></li>
+      <li><code>constellation.py</code><span>Walker constellations and the baseline geometry</span></li>
+      <li><code>frames.py</code><span>ECI to ECEF, geodetic sites, elevation angles</span></li>
+      <li><code>coverage.py</code><span>Site and global coverage analysis</span></li>
+    </ul>
+
+    <pre><code>pip install -e ".[test]"
+pytest                          # run the validation suite
+python scripts/run_analysis.py  # regenerate the figures above</code></pre>
+
+    <h2>Background</h2>
+    <p>This grew out of my undergraduate rotating space station design project, where I wrote a two-body propagator for the station's orbit and listed J2 as future work. This project adds J2, scales the propagator to a full constellation, and adds the coverage analysis.</p>
+
+    <p>Baseline geometry sourced from Payload Space, &ldquo;FCC Filings Show Eutelsat is Working on a New 528-sat Constellation Beyond OneWeb&rdquo;, July 2026.</p>
+
     <footer>
-      <p>© 2025 Nathaniel Karau — Engineering Portfolio v1.0</p>
+      <p><a href="index.html">&larr; Back to portfolio</a> &nbsp;&middot;&nbsp; <a href="https://github.com/Emma-airi/leo-coverage" target="_blank" rel="noopener">Source on GitHub</a> &nbsp;&middot;&nbsp; MIT licensed</p>
+      <p style="margin-top:0.5rem;">&copy; 2026 Emmanuel Airiofolo</p>
     </footer>
+
   </main>
 
-  <!-- Scripts -->
-  <script>
-    // Elements
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const content = document.querySelector('.content');
-    const sections = document.querySelectorAll('.section');
-
-    // Lightbox
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lbCloseBtn = document.getElementById('lbCloseBtn');
-
-    // ---------- Sidebar toggle (mobile) ----------
-    function openSidebar() {
-      sidebar.classList.add('active');
-      menuToggle.setAttribute('aria-expanded', 'true');
-      mobileOverlay.classList.add('active');
-      // NOTE: overlay is visual-only (pointer-events: none). We keep page scrollable behind.
-      // Focus the first link for accessibility
-      const firstLink = sidebar.querySelector('a');
-      if (firstLink) firstLink.focus();
-    }
-    function closeSidebar() {
-      sidebar.classList.remove('active');
-      menuToggle.setAttribute('aria-expanded', 'false');
-      mobileOverlay.classList.remove('active');
-      menuToggle.focus();
-    }
-
-    menuToggle.addEventListener('click', () => {
-      if (sidebar.classList.contains('active')) closeSidebar();
-      else openSidebar();
-    });
-
-    // Close sidebar if a nav link is clicked (mobile)
-    sidebar.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        if (window.innerWidth <= 767) closeSidebar();
-      });
-    });
-
-    // If user taps outside when sidebar is active, we DO NOT auto-close (to honor "allow scroll").
-    // You can close with the hamburger again.
-
-    // ---------- Section fade-in (IntersectionObserver) ----------
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.12 });
-    sections.forEach(s => observer.observe(s));
-
-    // ---------- Lightbox behavior ----------
-    function openLightbox(src, alt) {
-      lightboxImg.src = src;
-      lightboxImg.alt = alt || 'Expanded image';
-      lightbox.classList.add('open');
-      lightbox.setAttribute('aria-hidden','false');
-      lbCloseBtn.focus();
-    }
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-      lightbox.setAttribute('aria-hidden','true');
-      lightboxImg.src = '';
-    }
-
-    // Click images to open
-    document.querySelectorAll('.img-wrapper').forEach(wrapper => {
-      wrapper.addEventListener('click', () => {
-        const img = wrapper.querySelector('img');
-        openLightbox(img.src, img.alt);
-      });
-      // keyboard access
-      wrapper.setAttribute('tabindex','0');
-      wrapper.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          const img = wrapper.querySelector('img');
-          openLightbox(img.src, img.alt);
-        }
-      });
-    });
-
-// Collect all lightbox images (drawings + photos)
-const imgWrappers = document.querySelectorAll('.img-wrapper');
-let currentIndex = -1; // track which image is open
-
-function openLightbox(src, alt, index) {
-  lightboxImg.src = src;
-  lightboxImg.alt = alt || 'Expanded image';
-  lightbox.classList.add('open');
-  lightbox.setAttribute('aria-hidden','false');
-  currentIndex = index;
-  lbCloseBtn.focus();
-}
-
-function showImage(index) {
-  if (index < 0) index = imgWrappers.length - 1;
-  if (index >= imgWrappers.length) index = 0;
-  const img = imgWrappers[index].querySelector('img');
-  openLightbox(img.src, img.alt, index);
-}
-
-// Click to open
-imgWrappers.forEach((wrapper, i) => {
-  wrapper.addEventListener('click', () => {
-    const img = wrapper.querySelector('img');
-    openLightbox(img.src, img.alt, i);
-  });
-  wrapper.setAttribute('tabindex','0');
-  wrapper.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const img = wrapper.querySelector('img');
-      openLightbox(img.src, img.alt, i);
-    }
-  });
-});
-
-// Nav buttons
-document.getElementById('lbPrevBtn').addEventListener('click', () => showImage(currentIndex - 1));
-document.getElementById('lbNextBtn').addEventListener('click', () => showImage(currentIndex + 1));
-
-// Keyboard support
-window.addEventListener('keydown', (e) => {
-  if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'ArrowRight') showImage(currentIndex + 1);
-  if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
-});
-	  
-    // Close controls
-    lbCloseBtn.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e) => {
-      // If user clicked the backdrop (not the img or close button), close
-      if (e.target === lightbox) closeLightbox();
-    });
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (lightbox.classList.contains('open')) closeLightbox();
-        if (sidebar.classList.contains('active') && window.innerWidth <= 767) closeSidebar();
-      }
-    });
-
-    // Lightbox swipe-to-close (vertical swipe)
-    (function addSwipeClose(el) {
-      let startY = null;
-      let moved = false;
-      el.addEventListener('touchstart', (e) => {
-        if (e.touches && e.touches.length === 1) {
-          startY = e.touches[0].clientY;
-          moved = false;
-        }
-      }, {passive:true});
-      el.addEventListener('touchmove', (e) => {
-        if (!startY) return;
-        const currentY = e.touches[0].clientY;
-        const diff = currentY - startY;
-        if (Math.abs(diff) > 20) moved = true;
-      }, {passive:true});
-      el.addEventListener('touchend', (e) => {
-        if (!moved) { startY = null; return; }
-        const endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : null;
-        if (startY && endY) {
-          const delta = endY - startY;
-          // swipe up or down to close
-          if (Math.abs(delta) > 80) closeLightbox();
-        }
-        startY = null; moved = false;
-      });
-    })(lightbox);
-
-    // ---------- Ensure model-viewer scales nicely on resize ----------
-    function adjustModelViewerHeight() {
-      const mv = document.querySelector('model-viewer');
-      if (!mv) return;
-      if (window.innerWidth < 480) mv.style.height = '40vh';
-      else if (window.innerWidth < 768) mv.style.height = '45vh';
-      else if (window.innerWidth < 1024) mv.style.height = '55vh';
-      else mv.style.height = '60vh';
-    }
-    window.addEventListener('resize', adjustModelViewerHeight);
-    adjustModelViewerHeight();
-
-    // ---------- Small UX improvements ----------
-    // Trap focus inside sidebar when it's open on mobile? We keep allow-scroll so focus-trap is not necessary.
-    // But we ensure keyboard users can toggle menu with Escape (handled above) and the toggle button is labeled.
-
-    // If user reloads while sidebar active on small screens, ensure state is consistent
-    window.addEventListener('load', () => {
-      if (window.innerWidth <= 767) {
-        sidebar.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-        menuToggle.setAttribute('aria-expanded','false');
-      }
-    });
-  </script>
 </body>
 </html>
